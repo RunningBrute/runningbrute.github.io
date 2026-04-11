@@ -29,12 +29,28 @@ List
 
 ---
 
-Code block
 
+```python
 def hello():
     print("Hello, world!")
 
 hello()
+```
+
+```cpp
+#include <string>
+
+int main()
+{
+    std::invoke(
+        [](){
+            std::cout << "Hello";
+        }
+    );
+
+    return 0;
+}
+```
 
 
 ---
