@@ -1,15 +1,13 @@
 ---
-
-title: "Hello World – Test Post"
+title: Hello World
 date: 2026-04-11
 categories: [Test]
-tags: [hello-world, demo, markdown]
+tags: [hello-world, demo]
+---
 
 Hello World
 
 This is a simple test post to verify that everything works correctly.
-
----
 
 Text formatting
 
