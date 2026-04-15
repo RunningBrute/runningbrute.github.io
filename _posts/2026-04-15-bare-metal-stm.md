@@ -152,7 +152,7 @@ We need to tell the linker what the memory layout of the microcontroller looks l
 
 A minimal linker script:
 
-```ld
+```
 /* linker_script.ld */
 
 MEMORY
