@@ -1,5 +1,5 @@
 ---
-title: Bare Metal STM32 Nucleo
+title: Bare Metal STM32 - compilation
 date: 2026-04-15
 categories: [embedded]
 tags: [stm32, bare-metal]
