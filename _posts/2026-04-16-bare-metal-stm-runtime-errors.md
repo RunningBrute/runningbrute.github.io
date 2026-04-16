@@ -214,6 +214,119 @@ Now the compiler takes care of setting the Thumb bit.
 
 ---
 
+## A quick note on Thumb mode
+
+At this point something might look a bit confusing.
+
+In the vector table we expect the reset handler to point to something like:
+
+```text
+0x08000015
+```
+
+But when debugging, GDB shows:
+
+```text
+pc: 0x08000014
+```
+
+So which one is correct?
+
+Both.
+
+---
+
+### Function address vs function pointer
+
+On Cortex-M, there is an important distinction between:
+
+* where the function actually lives in memory
+* how the CPU is supposed to execute it
+
+The function itself is located at:
+
+```text
+0x08000014
+```
+
+This is the real, aligned address in FLASH.
+
+But a function pointer is not just an address.
+
+---
+
+### The Thumb bit
+
+On ARM Cortex-M, the least significant bit of a function pointer is used to indicate execution mode:
+
+* `bit 0 = 1` → Thumb mode
+* `bit 0 = 0` → ARM mode (not supported on Cortex-M → crash)
+
+So the correct pointer stored in the vector table is:
+
+```text
+0x08000015
+```
+
+---
+
+### What the CPU actually does
+
+When the CPU reads the reset handler address from the vector table:
+
+1. it sees `0x08000015`
+2. it sets the Thumb mode internally
+3. it clears bit 0
+4. it starts executing at `0x08000014`
+
+That’s why GDB shows:
+
+```text
+pc: 0x08000014
+```
+
+---
+
+### Why it broke before
+
+Previously, the vector table contained:
+
+```text
+0x08000014
+```
+
+Which means:
+
+* Thumb bit = 0
+* CPU tries to execute in ARM mode
+* immediate HardFault
+
+---
+
+### Why using function pointers fixes it
+
+When we define the vector table like this:
+
+```cpp
+typedef void (*handler_t)();
+
+__attribute__((section(".isr_vector")))
+const handler_t vector_table[] =
+{
+    (handler_t)0x20020000,
+    Reset_Handler
+};
+```
+
+the compiler automatically sets the Thumb bit for function pointers.
+
+---
+
+This is one of those details that is easy to miss —
+and incredibly confusing when everything *looks* correct but still crashes immediately.
+
+---
+
 ## Finally — the system boots
 
 After rebuilding and flashing:
