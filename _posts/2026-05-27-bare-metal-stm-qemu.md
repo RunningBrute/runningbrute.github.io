@@ -43,7 +43,8 @@ qemu-system-arm \
 Then, finally we can connect from GDB as usual using target remote `localhost:1234`:
 
 ```bash
-~/nanortos$ arm-none-eabi-gdb build/nano_rtos.elf
+arm-none-eabi-gdb build/nano_rtos.elf
+
 GNU gdb (Arm GNU Toolchain 15.2.Rel1 (Build arm-15.86)) 16.3.90.20250906-git
 Copyright (C) 2024 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
